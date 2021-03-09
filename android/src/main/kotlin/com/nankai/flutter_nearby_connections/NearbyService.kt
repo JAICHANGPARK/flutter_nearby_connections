@@ -24,6 +24,7 @@ class NearbyService : Service() {
 
     override fun onCreate() {
         super.onCreate()
+        Log.d(TAG, ">>> NearbyService onCreate()")
         stopForeground(true)
         startForeground(NOTIFICATION_ID, getNotification())
     }
