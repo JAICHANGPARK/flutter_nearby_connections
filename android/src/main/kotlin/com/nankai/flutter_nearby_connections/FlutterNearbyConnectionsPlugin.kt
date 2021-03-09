@@ -104,6 +104,8 @@ class FlutterNearbyConnectionsPlugin : FlutterPlugin, MethodCallHandler, Activit
 //                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 //                }
 
+                result.success(true)
+
             }
             startAdvertisingPeer -> {
                 Log.d("nearby_connections", "startAdvertisingPeer")
