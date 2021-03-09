@@ -24,6 +24,7 @@ class NearbyService : Service() {
 
     override fun onCreate() {
         super.onCreate()
+        stopForeground(true)
         startForeground(NOTIFICATION_ID, getNotification())
     }
 
@@ -72,11 +73,13 @@ class NearbyService : Service() {
     }
 
     override fun onDestroy() {
-        super.onDestroy()
+        Log.d(TAG, ">>> NearbyService onDestroy()")
         stopForeground(true)
         stopAdvertising()
         stopDiscovery()
         connectionsClient.stopAllEndpoints()
+        super.onDestroy()
+
     }
 
     private fun getNotification(): Notification? {
