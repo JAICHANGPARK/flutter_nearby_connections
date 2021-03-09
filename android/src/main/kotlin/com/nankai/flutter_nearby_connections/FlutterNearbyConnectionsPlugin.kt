@@ -101,8 +101,8 @@ class FlutterNearbyConnectionsPlugin : FlutterPlugin, MethodCallHandler, Activit
                 locationHelper?.requestLocationPermission(result)
             }
             stopNearbyService ->{
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                }
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//                }
 
             }
             startAdvertisingPeer -> {
