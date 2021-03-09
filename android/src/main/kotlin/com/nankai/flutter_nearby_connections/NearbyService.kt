@@ -73,7 +73,7 @@ class NearbyService : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
-        stopForeground(true);
+        stopForeground(true)
         stopAdvertising()
         stopDiscovery()
         connectionsClient.stopAllEndpoints()
