@@ -1,6 +1,7 @@
 part of flutter_nearby_connections;
 
 const _initNearbyService = 'init_nearby_service';
+const _stopNearbyService = 'stop_nearby_service';
 const _startAdvertisingPeer = 'start_advertising_peer';
 const _stopAdvertisingPeer = 'stop_advertising_peer';
 const _startBrowsingForPeers = 'start_browsing_for_peers';
@@ -106,6 +107,11 @@ class NearbyService {
       callback(true);
     }
   }
+
+  Future stopNearbyConnectionService()async{
+    await _channel.invokeMethod(_stopNearbyService);
+  }
+
 
   /// Begins advertising the service provided by a local peer.
   /// The [startAdvertisingPeer] publishes an advertisement for a specific service

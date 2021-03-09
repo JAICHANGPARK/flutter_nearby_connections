@@ -27,8 +27,8 @@ class NearbyService : Service() {
         startForeground(NOTIFICATION_ID, getNotification())
     }
 
-    fun initService(callbackUtils : CallbackUtils){
-        connectionsClient =  Nearby.getConnectionsClient(this)
+    fun initService(callbackUtils: CallbackUtils) {
+        connectionsClient = Nearby.getConnectionsClient(this)
         this@NearbyService.callbackUtils = callbackUtils
     }
 
@@ -37,45 +37,46 @@ class NearbyService : Service() {
         return binder
     }
 
-    fun sendStringPayload(endpointId: String ,str: String) {
-         connectionsClient.sendPayload(endpointId, Payload.fromBytes(str.toByteArray()))
+    fun sendStringPayload(endpointId: String, str: String) {
+        connectionsClient.sendPayload(endpointId, Payload.fromBytes(str.toByteArray()))
     }
 
     fun startAdvertising(strategy: Strategy, deviceName: String) {
         Log.d(TAG, "startAdvertising()")
-         connectionsClient.startAdvertising(
-                 deviceName, SERVICE_ID, callbackUtils.connectionLifecycleCallback,
+        connectionsClient.startAdvertising(
+                deviceName, SERVICE_ID, callbackUtils.connectionLifecycleCallback,
                 AdvertisingOptions.Builder().setStrategy(strategy).build())
     }
 
     fun startDiscovery(strategy: Strategy) {
         Log.d(TAG, "startDiscovery()")
-         connectionsClient.startDiscovery(
+        connectionsClient.startDiscovery(
                 SERVICE_ID, callbackUtils.endpointDiscoveryCallback,
                 DiscoveryOptions.Builder().setStrategy(strategy).build())
     }
 
     fun stopDiscovery() {
-         connectionsClient.stopDiscovery()
+        connectionsClient.stopDiscovery()
     }
 
     fun stopAdvertising() {
-         connectionsClient.stopAdvertising()
+        connectionsClient.stopAdvertising()
     }
 
     fun disconnect(endpointId: String) {
-         connectionsClient.disconnectFromEndpoint(endpointId)
+        connectionsClient.disconnectFromEndpoint(endpointId)
     }
 
     fun connect(endpointId: String, displayName: String) {
-         connectionsClient.requestConnection(displayName, endpointId, callbackUtils.connectionLifecycleCallback)
+        connectionsClient.requestConnection(displayName, endpointId, callbackUtils.connectionLifecycleCallback)
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        stopForeground(true);
         stopAdvertising()
         stopDiscovery()
-         connectionsClient.stopAllEndpoints()
+        connectionsClient.stopAllEndpoints()
     }
 
     private fun getNotification(): Notification? {

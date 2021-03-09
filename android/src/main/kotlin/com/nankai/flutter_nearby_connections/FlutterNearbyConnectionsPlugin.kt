@@ -9,6 +9,8 @@ import android.os.Build
 import android.os.IBinder
 import android.util.Log
 import androidx.annotation.NonNull
+import androidx.core.app.ServiceCompat.stopForeground
+
 import androidx.core.content.ContextCompat.startForegroundService
 import com.google.android.gms.nearby.Nearby
 import com.google.android.gms.nearby.connection.*
@@ -26,6 +28,7 @@ import kotlin.system.exitProcess
 const val SERVICE_ID = "flutter_nearby_connections"
 
 const val initNearbyService = "init_nearby_service"
+const val stopNearbyService = "stop_nearby_service";
 const val startAdvertisingPeer = "start_advertising_peer"
 const val startBrowsingForPeers = "start_browsing_for_peers"
 
@@ -97,6 +100,11 @@ class FlutterNearbyConnectionsPlugin : FlutterPlugin, MethodCallHandler, Activit
 
                 locationHelper?.requestLocationPermission(result)
             }
+            stopNearbyService ->{
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                }
+
+            }
             startAdvertisingPeer -> {
                 Log.d("nearby_connections", "startAdvertisingPeer")
                 mService?.startAdvertising(strategy, localDeviceName)
@@ -136,6 +144,8 @@ class FlutterNearbyConnectionsPlugin : FlutterPlugin, MethodCallHandler, Activit
             }
         }
     }
+
+
 
     private val connection: ServiceConnection = object : ServiceConnection {
         override fun onServiceConnected(className: ComponentName, service: IBinder) {
