@@ -103,7 +103,8 @@ class FlutterNearbyConnectionsPlugin : FlutterPlugin, MethodCallHandler, Activit
                 Log.d("nearby_connections", "stopNearbyService")
 //                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 //                }
-
+                val intent = Intent(activity, NearbyService::class.java)
+                activity.unbindService(connection)
                 result.success(true)
 
             }
