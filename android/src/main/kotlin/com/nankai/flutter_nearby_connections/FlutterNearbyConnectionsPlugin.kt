@@ -9,6 +9,7 @@ import android.os.Build
 import android.os.IBinder
 import android.util.Log
 import androidx.annotation.NonNull
+import androidx.core.app.ServiceCompat.stopForeground
 
 import androidx.core.content.ContextCompat.startForegroundService
 import com.google.android.gms.nearby.Nearby
@@ -103,8 +104,13 @@ class FlutterNearbyConnectionsPlugin : FlutterPlugin, MethodCallHandler, Activit
                 Log.d("nearby_connections", "stopNearbyService")
 //                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 //                }
+//                val intent = Intent(activity, NearbyService::class.java)
+//                activity.unbindService(connection)
+
                 val intent = Intent(activity, NearbyService::class.java)
-                activity.unbindService(connection)
+                intent.action = Actions.STOP_FOREGROUND
+                activity.startService(intent)
+
                 result.success(true)
 
             }
