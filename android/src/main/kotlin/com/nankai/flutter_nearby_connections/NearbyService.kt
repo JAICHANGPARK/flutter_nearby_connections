@@ -17,6 +17,16 @@ import com.google.android.gms.nearby.connection.*
 const val NOTIFICATION_ID = 101
 const val CHANNEL_ID = "channel"
 
+object Actions {
+    private const val prefix = "com.nankai.flutter_nearby_connections.action."
+    const val MAIN = prefix + "main"
+    const val PREV = prefix + "prev"
+    const val NEXT = prefix + "next"
+    const val PLAY = prefix + "play"
+    const val START_FOREGROUND = prefix + "startforeground"
+    const val STOP_FOREGROUND = prefix + "stopforeground"
+}
+
 class NearbyService : Service() {
     private val binder: IBinder = LocalBinder(this)
     private lateinit var callbackUtils: CallbackUtils
@@ -73,6 +83,26 @@ class NearbyService : Service() {
         connectionsClient.requestConnection(displayName, endpointId, callbackUtils.connectionLifecycleCallback)
     }
 
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        Log.e(TAG, "Action Received = ${intent?.action}")
+        // intent가 시스템에 의해 재생성되었을때 null값이므로 Java에서는 null check 필수
+        when (intent?.action) {
+            Actions.START_FOREGROUND -> {
+                Log.e(TAG, "Start Foreground 인텐트를 받음")
+//                startForegroundService()
+            }
+            Actions.STOP_FOREGROUND -> {
+                Log.e(TAG, "Stop Foreground 인텐트를 받음")
+                stopForegroundService()
+            }
+            Actions.PREV -> Log.e(TAG, "Clicked = 이전")
+            Actions.PLAY -> Log.e(TAG, "Clicked = 재생")
+            Actions.NEXT -> Log.e(TAG, "Clicked = 다음")
+        }
+        return START_STICKY
+    }
+
+
     override fun onDestroy() {
         Log.d(TAG, ">>> NearbyService onDestroy()")
         stopForeground(true)
@@ -82,6 +112,12 @@ class NearbyService : Service() {
         super.onDestroy()
 
     }
+
+    private fun stopForegroundService() {
+        stopForeground(true)
+        stopSelf()
+    }
+
 
     private fun getNotification(): Notification? {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
