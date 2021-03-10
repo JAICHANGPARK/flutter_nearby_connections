@@ -49,6 +49,24 @@ class NearbyService : Service() {
         return binder
     }
 
+    override fun stopService(name: Intent?): Boolean {
+        Log.e(TAG, "stopService Action Received = ${name?.action}")
+        when (name?.action) {
+            Actions.START_FOREGROUND -> {
+                Log.e(TAG, "Start Foreground 인텐트를 받음")
+//                startForegroundService()
+            }
+            Actions.STOP_FOREGROUND -> {
+                Log.e(TAG, "Stop Foreground 인텐트를 받음")
+                stopForegroundService()
+            }
+            Actions.PREV -> Log.e(TAG, "Clicked = 이전")
+            Actions.PLAY -> Log.e(TAG, "Clicked = 재생")
+            Actions.NEXT -> Log.e(TAG, "Clicked = 다음")
+        }
+        return true;
+    }
+
     fun sendStringPayload(endpointId: String, str: String) {
         connectionsClient.sendPayload(endpointId, Payload.fromBytes(str.toByteArray()))
     }
