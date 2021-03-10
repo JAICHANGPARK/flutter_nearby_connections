@@ -34,7 +34,7 @@ class NearbyService : Service() {
 
     override fun onCreate() {
         super.onCreate()
-        Log.d(TAG, ">>> NearbyService onCreate()")
+        Log.e(TAG, ">>> NearbyService onCreate()")
         stopForeground(true)
         startForeground(NOTIFICATION_ID, getNotification())
     }
@@ -72,14 +72,14 @@ class NearbyService : Service() {
     }
 
     fun startAdvertising(strategy: Strategy, deviceName: String) {
-        Log.d(TAG, "startAdvertising()")
+        Log.e(TAG, "startAdvertising()")
         connectionsClient.startAdvertising(
                 deviceName, SERVICE_ID, callbackUtils.connectionLifecycleCallback,
                 AdvertisingOptions.Builder().setStrategy(strategy).build())
     }
 
     fun startDiscovery(strategy: Strategy) {
-        Log.d(TAG, "startDiscovery()")
+        Log.e(TAG, "startDiscovery()")
         connectionsClient.startDiscovery(
                 SERVICE_ID, callbackUtils.endpointDiscoveryCallback,
                 DiscoveryOptions.Builder().setStrategy(strategy).build())
@@ -122,7 +122,7 @@ class NearbyService : Service() {
 
 
     override fun onDestroy() {
-        Log.d(TAG, ">>> NearbyService onDestroy()")
+        Log.e(TAG, ">>> NearbyService onDestroy()")
         stopForeground(true)
         stopAdvertising()
         stopDiscovery()
