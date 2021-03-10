@@ -49,6 +49,12 @@ class NearbyService : Service() {
         return binder
     }
 
+    override fun onUnbind(intent: Intent?): Boolean {
+        Log.e(TAG, "Call onUnbind")
+        stopForegroundService()
+        return true;
+    }
+
     override fun stopService(name: Intent?): Boolean {
         Log.e(TAG, "stopService Action Received = ${name?.action}")
         when (name?.action) {

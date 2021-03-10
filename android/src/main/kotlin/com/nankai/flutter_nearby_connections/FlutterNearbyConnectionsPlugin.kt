@@ -111,6 +111,7 @@ class FlutterNearbyConnectionsPlugin : FlutterPlugin, MethodCallHandler, Activit
                 val intent = Intent(activity, NearbyService::class.java)
                 intent.action = Actions.STOP_FOREGROUND
                 activity.stopService(intent)
+                activity.unbindService(connection);
 
                 result.success(true)
 
