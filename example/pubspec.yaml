@@ -12,7 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  fluttertoast: ^7.0.4
+  fluttertoast: ^8.0.3
 
   flutter_nearby_connections:
     path: ../

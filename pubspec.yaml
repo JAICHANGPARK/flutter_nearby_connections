@@ -12,7 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
   pedantic: ^1.11.0
-  fluttertoast: ^7.1.8
+  fluttertoast: ^8.0.3
 
 dev_dependencies:
   flutter_test:
