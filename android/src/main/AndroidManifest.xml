@@ -23,6 +23,6 @@
         <service
                 android:name=".NearbyService"
                 android:enabled="true"
-                android:exported="false"/>
+                android:exported="true"/>
     </application>
 </manifest>
