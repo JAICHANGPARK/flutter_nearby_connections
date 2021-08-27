@@ -83,7 +83,7 @@ class CallbackUtils constructor(private val channel: MethodChannel, private val 
         override fun onConnectionResult(endpointId: String, result: ConnectionResolution) {
             Log.d("nearby_connections", "onConnectionResult $endpointId")
             val data = if (result.status.isSuccess) {
-             DeviceJson(endpointId,
+                DeviceJson(endpointId,
                         if (device(endpointId)?.deviceName == null) "Null" else device(endpointId)?.deviceName!!,connected)
             }else{
                 DeviceJson(endpointId,

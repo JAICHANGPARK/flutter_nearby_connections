@@ -11,9 +11,9 @@ import io.flutter.plugin.common.MethodChannel
 import java.util.concurrent.atomic.AtomicBoolean
 
 class ServiceBindManager(
-    val context: Context,
-    val channel: MethodChannel,
-    val callback: CallbackUtils
+        val context: Context,
+        val channel: MethodChannel,
+        val callback: CallbackUtils
 ) {
 
     val TAG: String = "ServiceBindManager"

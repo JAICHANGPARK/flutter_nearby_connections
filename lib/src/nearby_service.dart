@@ -22,7 +22,7 @@ typedef DataReceivedCallback = Function(dynamic data);
 
 class NearbyService {
   static const MethodChannel _channel =
-      const MethodChannel('flutter_nearby_connections');
+  const MethodChannel('flutter_nearby_connections');
 
   final _stateChangedController = StreamController<List<Device>>.broadcast();
 
@@ -49,9 +49,9 @@ class NearbyService {
   /// param [strategy] Nearby Connections supports different Strategies for advertising and discovery. The best Strategy to use depends on the use case. only support android OS
   Future init(
       {required String serviceType,
-      required Strategy strategy,
-      String? deviceName,
-      required Function callback}) async {
+        required Strategy strategy,
+        String? deviceName,
+        required Function callback}) async {
     assert(serviceType.length <= 15 &&
         //serviceType != null &&
         serviceType.isNotEmpty);

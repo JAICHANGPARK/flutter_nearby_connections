@@ -54,16 +54,16 @@ class NearbyService : Service() {
     fun startAdvertising(strategy: Strategy, deviceName: String) {
         Log.d(TAG, "startAdvertising()")
         connectionsClient.startAdvertising(
-            deviceName, SERVICE_ID, callbackUtils.connectionLifecycleCallback,
-            AdvertisingOptions.Builder().setStrategy(strategy).build()
+                deviceName, SERVICE_ID, callbackUtils.connectionLifecycleCallback,
+                AdvertisingOptions.Builder().setStrategy(strategy).build()
         )
     }
 
     fun startDiscovery(strategy: Strategy) {
         Log.d(TAG, "startDiscovery()")
         connectionsClient.startDiscovery(
-            SERVICE_ID, callbackUtils.endpointDiscoveryCallback,
-            DiscoveryOptions.Builder().setStrategy(strategy).build()
+                SERVICE_ID, callbackUtils.endpointDiscoveryCallback,
+                DiscoveryOptions.Builder().setStrategy(strategy).build()
         )
     }
 
@@ -85,9 +85,9 @@ class NearbyService : Service() {
     fun connect(endpointId: String, displayName: String) {
         Log.d(TAG, "connect $endpointId | $displayName")
         connectionsClient.requestConnection(
-            displayName,
-            endpointId,
-            callbackUtils.connectionLifecycleCallback
+                displayName,
+                endpointId,
+                callbackUtils.connectionLifecycleCallback
         )
     }
 
@@ -101,17 +101,17 @@ class NearbyService : Service() {
     private fun getNotification(): Notification? {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val serviceChannel = NotificationChannel(
-                CHANNEL_ID, "Foreground Service Channel",
-                NotificationManager.IMPORTANCE_DEFAULT
+                    CHANNEL_ID, "Foreground Service Channel",
+                    NotificationManager.IMPORTANCE_DEFAULT
             )
             val manager = getSystemService(NotificationManager::class.java)
             manager.createNotificationChannel(serviceChannel)
         }
         return NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle("Nearby Service")
-            .setContentText("Wi-Fi Direct")
-            .setSmallIcon(android.R.drawable.stat_notify_sync)
-            .build()
+                .setContentTitle("Nearby Service")
+                .setContentText("Wi-Fi Direct")
+                .setSmallIcon(android.R.drawable.stat_notify_sync)
+                .build()
     }
 }
 
