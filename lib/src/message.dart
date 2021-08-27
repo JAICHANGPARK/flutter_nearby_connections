@@ -1,3 +1,4 @@
+
 part of flutter_nearby_connections;
 
 /// The class [Message] data transmitted between two peers.

@@ -1,3 +1,4 @@
+
 part of flutter_nearby_connections;
 
 /// [SessionState] It identifies  peer's state and provides 3 states: [SessionState.notConnected], [SessionState.connecting], [SessionState.connected].

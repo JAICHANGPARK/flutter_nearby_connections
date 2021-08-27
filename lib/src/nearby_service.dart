@@ -15,7 +15,7 @@ const _invokeNearbyRunning = "nearby_running";
 
 /// [StateChangedCallback] is used to call back an object under List<Device>.
 /// [StateChangedCallback] will call when you register in [stateChangedSubscription]
-typedef StateChangedCallback = Function(List<Device> arguments);
+typedef StateChangedCallback = Function(List<Device>? arguments);
 
 /// [DataReceivedCallback] is used to call back an object under List<Device>.
 /// [DataReceivedCallback] will call when you register in [dataReceivedSubscription]
@@ -24,9 +24,9 @@ typedef DataReceivedCallback = Function(dynamic data);
 class NearbyService {
   static const MethodChannel _channel = const MethodChannel('flutter_nearby_connections');
 
-  final _stateChangedController = StreamController<List<Device>>.broadcast();
+  final _stateChangedController = StreamController<List<Device>?>.broadcast();
 
-  Stream<List<Device>> get _stateChangedStream => _stateChangedController.stream;
+  Stream<List<Device>?> get _stateChangedStream => _stateChangedController.stream;
 
   final _dataReceivedController = StreamController<dynamic>.broadcast();
 
@@ -46,14 +46,14 @@ class NearbyService {
   ///
   /// param [deviceId] is unique, you should use the UDID for [deviceId]
   /// param [strategy] Nearby Connections supports different Strategies for advertising and discovery. The best Strategy to use depends on the use case. only support android OS
-  Future init({@required String serviceType, @required Strategy strategy, String deviceName, @required Function callback}) async {
+  Future init({required String serviceType, required Strategy strategy, String? deviceName, required Function callback}) async {
     assert(serviceType.length <= 15 && serviceType != null && serviceType.isNotEmpty);
 
     _channel.setMethodCallHandler((handler) async {
       debugPrint("method: ${handler.method} | arguments: ${handler.arguments}");
       switch (handler.method) {
         case _invokeChangeStateMethod:
-          List<Device> devices = jsonDecode(handler.arguments).map<Device>((dynamic device) => Device.fromJson(device)).toList();
+          List<Device>? devices = jsonDecode(handler.arguments).map<Device>((dynamic device) => Device.fromJson(device)).toList();
           _stateChangedController.add(devices);
           break;
         case _invokeMessageReceiveMethod:
@@ -62,7 +62,7 @@ class NearbyService {
           break;
         case _invokeNearbyRunning:
           await Future.delayed(Duration(seconds: 1));
-          callback(handler.arguments as bool);
+          callback(handler.arguments as bool?);
           break;
       }
     });
@@ -130,7 +130,7 @@ class NearbyService {
 
   /// Invites a discovered peer to join a nearby connections session.
   /// the [deviceID] is current Device
-  FutureOr<dynamic> invitePeer({@required String deviceID, @required String deviceName}) async {
+  FutureOr<dynamic> invitePeer({required String deviceID, required String deviceName}) async {
     await _channel.invokeMethod(
       _invitePeer,
       <String, dynamic>{
@@ -142,7 +142,7 @@ class NearbyService {
 
   /// Disconnects the local peer from the session.
   /// the [deviceID] is current Device
-  FutureOr<dynamic> disconnectPeer({@required String deviceID}) async {
+  FutureOr<dynamic> disconnectPeer({required String deviceID}) async {
     await _channel.invokeMethod(_disconnectPeer, <String, dynamic>{
       'deviceId': deviceID,
     });
@@ -161,11 +161,11 @@ class NearbyService {
   /// a peer is invited to connect by another peer, or 2 peers are connected.
   /// [stateChangedSubscription] will return you a list of [Device].
   /// see [StateChangedCallback]
-  StreamSubscription stateChangedSubscription({@required StateChangedCallback callback}) => _stateChangedStream.listen(callback);
+  StreamSubscription stateChangedSubscription({required StateChangedCallback callback}) => _stateChangedStream.listen(callback);
 
   /// The [dataReceivedSubscription] helps you listen when a peer sends you
   /// text messages. and it returns you a object [Data].
   /// It returns a [StreamSubscription] so you can cancel listening at any time.
   /// see [DataReceivedCallback]
-  StreamSubscription dataReceivedSubscription({@required DataReceivedCallback callback}) => _dataReceivedStream.listen(callback);
+  StreamSubscription dataReceivedSubscription({required DataReceivedCallback callback}) => _dataReceivedStream.listen(callback);
 }
