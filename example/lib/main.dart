@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_nearby_connections/flutter_nearby_connections.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -16,16 +15,13 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case '/':
       return MaterialPageRoute(builder: (_) => Home());
     case 'browser':
-      return MaterialPageRoute(
-          builder: (_) => DevicesListScreen(deviceType: DeviceType.browser));
+      return MaterialPageRoute(builder: (_) => DevicesListScreen(deviceType: DeviceType.browser));
     case 'advertiser':
-      return MaterialPageRoute(
-          builder: (_) => DevicesListScreen(deviceType: DeviceType.advertiser));
+      return MaterialPageRoute(builder: (_) => DevicesListScreen(deviceType: DeviceType.advertiser));
     default:
       return MaterialPageRoute(
           builder: (_) => Scaffold(
-                body: Center(
-                    child: Text('No route defined for ${settings.name}')),
+                body: Center(child: Text('No route defined for ${settings.name}')),
               ));
   }
 }
@@ -85,7 +81,7 @@ class Home extends StatelessWidget {
 enum DeviceType { advertiser, browser }
 
 class DevicesListScreen extends StatefulWidget {
-  const DevicesListScreen({this.deviceType});
+  const DevicesListScreen({required this.deviceType});
 
   final DeviceType deviceType;
 
@@ -96,9 +92,9 @@ class DevicesListScreen extends StatefulWidget {
 class _DevicesListScreenState extends State<DevicesListScreen> {
   List<Device> devices = [];
   List<Device> connectedDevices = [];
-  NearbyService nearbyService;
-  StreamSubscription subscription;
-  StreamSubscription receivedDataSubscription;
+  NearbyService? nearbyService;
+  StreamSubscription? subscription;
+  StreamSubscription? receivedDataSubscription;
 
   bool isInit = false;
 
@@ -112,8 +108,8 @@ class _DevicesListScreenState extends State<DevicesListScreen> {
   void dispose() {
     subscription?.cancel();
     receivedDataSubscription?.cancel();
-    nearbyService.stopBrowsingForPeers();
-    nearbyService.stopAdvertisingPeer();
+    nearbyService?.stopBrowsingForPeers();
+    nearbyService?.stopAdvertisingPeer();
     super.dispose();
   }
 
@@ -127,9 +123,7 @@ class _DevicesListScreenState extends State<DevicesListScreen> {
         body: ListView.builder(
             itemCount: getItemCount(),
             itemBuilder: (context, index) {
-              final device = widget.deviceType == DeviceType.advertiser
-                  ? connectedDevices[index]
-                  : devices[index];
+              final device = widget.deviceType == DeviceType.advertiser ? connectedDevices[index] : devices[index];
               return Container(
                 margin: EdgeInsets.all(8.0),
                 child: Column(
@@ -144,8 +138,7 @@ class _DevicesListScreenState extends State<DevicesListScreen> {
                               Text(device.deviceName),
                               Text(
                                 getStateName(device.state),
-                                style: TextStyle(
-                                    color: getStateColor(device.state)),
+                                style: TextStyle(color: getStateColor(device.state)),
                               ),
                             ],
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -163,9 +156,7 @@ class _DevicesListScreenState extends State<DevicesListScreen> {
                             child: Center(
                               child: Text(
                                 getButtonStateName(device.state),
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold),
+                                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                               ),
                             ),
                           ),
@@ -246,8 +237,7 @@ class _DevicesListScreenState extends State<DevicesListScreen> {
                 FlatButton(
                   child: Text("Send"),
                   onPressed: () {
-                    nearbyService.sendMessage(
-                        device.deviceId, myController.text);
+                    nearbyService?.sendMessage(device.deviceId, myController.text);
                     myController.text = '';
                   },
                 )
@@ -268,13 +258,13 @@ class _DevicesListScreenState extends State<DevicesListScreen> {
   _onButtonClicked(Device device) {
     switch (device.state) {
       case SessionState.notConnected:
-        nearbyService.invitePeer(
+        nearbyService?.invitePeer(
           deviceID: device.deviceId,
           deviceName: device.deviceName,
         );
         break;
       case SessionState.connected:
-        nearbyService.disconnectPeer(deviceID: device.deviceId);
+        nearbyService?.disconnectPeer(deviceID: device.deviceId);
         break;
       case SessionState.connecting:
         break;
@@ -283,34 +273,32 @@ class _DevicesListScreenState extends State<DevicesListScreen> {
 
   void init() async {
     nearbyService = NearbyService();
-    await nearbyService.init(
+    await nearbyService?.init(
         serviceType: 'mp-connection',
         strategy: Strategy.P2P_CLUSTER,
         callback: (isRunning) async {
           if (isRunning) {
             if (widget.deviceType == DeviceType.browser) {
-              await nearbyService.stopBrowsingForPeers();
-              await nearbyService.startBrowsingForPeers();
+              await nearbyService?.stopBrowsingForPeers();
+              await nearbyService?.startBrowsingForPeers();
             } else {
-              await nearbyService.stopAdvertisingPeer();
-              await nearbyService.startAdvertisingPeer();
+              await nearbyService?.stopAdvertisingPeer();
+              await nearbyService?.startAdvertisingPeer();
 
-              await nearbyService.stopBrowsingForPeers();
-              await nearbyService.startBrowsingForPeers();
+              await nearbyService?.stopBrowsingForPeers();
+              await nearbyService?.startBrowsingForPeers();
             }
           }
         });
-    subscription =
-        nearbyService.stateChangedSubscription(callback: (devicesList) {
-      devicesList?.forEach((element) {
-        print(
-            " deviceId: ${element.deviceId} | deviceName: ${element.deviceName} | state: ${element.state}");
+    subscription = nearbyService?.stateChangedSubscription(callback: (devicesList) {
+      devicesList.forEach((element) {
+        print(" deviceId: ${element.deviceId} | deviceName: ${element.deviceName} | state: ${element.state}");
 
         if (Platform.isAndroid) {
           if (element.state == SessionState.connected) {
-            nearbyService.stopBrowsingForPeers();
+            nearbyService?.stopBrowsingForPeers();
           } else {
-            nearbyService.startBrowsingForPeers();
+            nearbyService?.startBrowsingForPeers();
           }
         }
       });
@@ -319,14 +307,11 @@ class _DevicesListScreenState extends State<DevicesListScreen> {
         devices.clear();
         devices.addAll(devicesList);
         connectedDevices.clear();
-        connectedDevices.addAll(devicesList
-            .where((d) => d.state == SessionState.connected)
-            .toList());
+        connectedDevices.addAll(devicesList.where((d) => d.state == SessionState.connected).toList());
       });
     });
 
-    receivedDataSubscription =
-        nearbyService.dataReceivedSubscription(callback: (data) {
+    receivedDataSubscription = nearbyService?.dataReceivedSubscription(callback: (data) {
       print("dataReceivedSubscription: ${jsonEncode(data)}");
       Fluttertoast.showToast(msg: jsonEncode(data));
     });

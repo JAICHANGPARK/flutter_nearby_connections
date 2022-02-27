@@ -1,5 +1,14 @@
+## 1.0.12
+
+* Update build gradles
+
+## 1.0.11
+
+* Migrate SDK 31
+
 ## 1.0.10
 
+* Migrate Null Safety
 * refactor readme and code
 
 ## 1.0.9
